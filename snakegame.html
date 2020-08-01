@@ -1,0 +1,529 @@
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+content="width=device-width , initial-scale=1.0">
+
+<style type="text/css">
+*{
+-webkit-user-select: none;
+}
+body{
+background:#aaa;
+}
+#can{
+background:yellow;
+}
+.buton{
+font-size:30px;
+margin:5px;
+outline:none;
+background:purple;
+padding:4px;
+}
+#tuslar{
+width:200px;
+float:right;
+}
+#ekran{
+width:130px;
+height:100px;
+border:3px solid black;
+float:left;
+background:#ddd;
+}
+#tablo{
+font-size:40px;
+margin-left:25px;
+background:#ddd;
+border:3px solid #ddd;
+}
+#dur{
+margin-top:-10px;
+margin-left:25px;
+padding:3px;
+background:black;
+color:#bbb;
+font-size:20px;
+outline:none;
+border-radius:10px;
+border-bottom:5px solid grey;
+}
+#dur:active{
+background:darkblue;
+coloor:white;
+border-bottom:1px solid grey;
+margin-top:-6px;
+}
+#durak{
+width:200px;
+height:100px;
+position:absolute;
+top:110px;
+left:80px;
+background:grey;
+opacity:0.8;
+border:3px solid black;
+border-radius:50px;
+display:none;
+}
+#devam{
+font-size:30px;
+background:black;
+color:white;
+position:relative;
+top:30px;
+left:25px;
+outline:none;
+border-bottom:5px solid #333;
+border-radius:10px;
+}
+#devam:active{
+border-bottom:1px solid black;
+top:34px;
+}
+#lost{
+width:250px;
+height:200px;
+background:purple;
+position:absolute;
+top:50px;
+left:60px;
+opacity:0.9;
+display:none;
+}
+h1{
+color:white;
+text-shadow:3px 3px 3px grey;
+}
+h2{
+color:lightblue;
+}
+#sp{
+font-size:25px;
+position:relative;
+top:10px;
+left:10px;
+color:skyblue;
+background:purple;
+border:3px solid purple;
+}
+#Tekrar{
+background:red;
+color:white;
+padding:5px;
+font-size:20px;
+outline:none;
+border-radius:20px;
+}
+</style>
+</head>
+<body>
+<canvas id="can" style="border:1px solid black;"></canvas>
+<hr>
+<div id="tuslar">
+<center><button class="buton" onClick="ust()">⬆</button></center>
+<center>
+<button class="buton" onClick="sol()">⬅</button>
+<button class="buton" onClick="alt()">⬇</button>
+<button class="buton" onClick="sag()">➡</button>
+</center></div>
+<div id="ekran"><form name="form1">
+<textarea cols="3"rows="1"id="tablo" name="ekran"
+disabled></textarea></form>
+<button id="dur" onClick="durdur()" >Pause</button>
+</div>
+<div id="durak">
+<button id="devam" onClick="devam()">Continue</button>
+</div>
+
+<div id="lost">
+<center><h1>You Lost!</h1></center>
+<form name="form2">
+<h2>Score:
+<textarea cols="3" rows="1" name="SP" id="SP" disabled></textarea></h2></form>
+<center>
+<button id="Tekrar" onClick="tekrar()">Play Again</button></center>
+</div>
+<script type="text/javascript">
+var can=document.getElementById("can");
+var c=can.getContext("2d");
+can.width=345;
+can.height=345;
+var M=0;var V;
+
+
+
+var yılan={
+x:100,y:100,w:10,h:10,
+x2:100,y2:90,x3:100,y3:80,x4:100,y4:70,x8:100,y8:40,
+x5:100,y5:60,x6:100,y6:50,x7:100,y7:40,x9:100,y9:90,
+x12:900,y12:80,x11:192,y11:70,x10:102,y10:40,
+x13:103,y13:60,x14:159,y14:50,x15:120,y15:40,x37:101,y37:14,
+x21:1,y21:185,x31:128,y31:60,x32:198,y32:50,
+x33:100,y33:40,x34:1,y34:120,x35:12,y35:40,x36:158,y36:110,
+x22:180,y22:90,x23:190,y23:80,x24:13,y24:70,x28:27,y28:40,
+x25:10,y25:57,x26:93,y26:50,x27:148,y27:401,x29:19,y29:90,
+x20:230,y20:80,x19:72,y19:70,x18:9,y18:40,x30:30,y30:30,
+x17:16,y17:60,x16:30,y16:50,x15:100,y15:40,
+x38:3,y38:90,x39:17,y39:8,x40:200,y40:70,x41:100,y41:40,
+x42:0,y42:60,x43:17,y43:50,x44:190,y44:40,x45:100,y45:90,
+x46:110,y146:80,x47:70,y47:70,
+draw:function(){
+c.fillStyle="red";
+c.fillRect(this.x,this.y,this.w,this.h);
+c.fillStyle="black";
+c.fillRect(this.x2,this.y2,this.w,this.h);
+c.fillRect(this.x3,this.y3,this.w,this.h);
+c.fillRect(this.x4,this.y4,this.w,this.h);
+c.fillRect(this.x5,this.y5,this.w,this.h);
+c.fillRect(this.x6,this.y6,this.w,this.h);
+c.fillRect(this.x7,this.y7,this.w,this.h);
+}}
+
+var yem={
+w:10,
+h:10,
+draw:function(){
+c.fillStyle="blue";
+c.fillRect(yem_x,yem_y,this.w,this.h)
+}
+}
+V=100;
+var init=setInterval(init,V);
+function init(){
+c.clearRect(0,0,345,345);
+yılan.draw();
+hareket();
+gecis();
+yem.draw();
+DrawYem();
+if(yem_x==yılan.x&&yem_y==yılan.y){YemiYe();};
+ArtCiz();
+olum();
+}
+
+function ust(){if(M!=2&&M!=0&&M!=5){M=1;};if(M==0){M=0;}else if(M==5){M=5;}else{}}
+function alt(){if(M!=1&&M!=5){M=2;}else if(M==5){M=5;}else{}}
+function sol(){if(M!=4&&M!=5){M=3;}else if(M==5){M=5;}else{}}
+function sag(){if(M!=3&&M!=5){M=4;}else if(M==5){M=5;}else{}}
+
+//hareket
+function hareket(){
+if(M==1||M==2||M==3||M==4){
+// x ler
+yılan.x47=yılan.x46;yılan.x46=yılan.x45;yılan.x45=yılan.x44;
+yılan.x44=yılan.x43;yılan.x43=yılan.x42;yılan.x42=yılan.x41;
+yılan.x41=yılan.x40;
+yılan.x40=yılan.x39;yılan.x39=yılan.x38;yılan.x38=yılan.x37;
+yılan.x37=yılan.x36;yılan.x36=yılan.x35;yılan.x35=yılan.x34;
+yılan.x34=yılan.x33;yılan.x33=yılan.x32;yılan.x32=yılan.x31;
+yılan.x31=yılan.x30;
+yılan.x30=yılan.x29;yılan.x29=yılan.x28;
+yılan.x28=yılan.x27;yılan.x27=yılan.x26;yılan.x26=yılan.x25;
+yılan.x25=yılan.x24;
+yılan.x24=yılan.x23;yılan.x23=yılan.x22;yılan.x22=yılan.x21;
+yılan.x21=yılan.x20;yılan.x20=yılan.x19;yılan.x19=yılan.x18;
+yılan.x18=yılan.x17;yılan.x17=yılan.x16;yılan.x16=yılan.x15;
+yılan.x15=yılan.x14;yılan.x14=yılan.x13;
+yılan.x13=yılan.x12;yılan.x12=yılan.x11;yılan.x11=yılan.x10;
+yılan.x10=yılan.x9;yılan.x9=yılan.x8;yılan.x8=yılan.x7;
+yılan.x7=yılan.x6;yılan.x6=yılan.x5;yılan.x5=yılan.x4;
+yılan.x4=yılan.x3;yılan.x3=yılan.x2;yılan.x2=yılan.x;
+//y ler
+yılan.y47=yılan.y46;yılan.y46=yılan.y45;yılan.y45=yılan.y44;
+yılan.y44=yılan.y43;yılan.y43=yılan.y42;yılan.y42=yılan.y41;
+yılan.y41=yılan.y40;yılan.y40=yılan.y39;yılan.y39=yılan.y38;
+yılan.y38=yılan.y37;
+yılan.y37=yılan.y36;yılan.y36=yılan.y35;yılan.y35=yılan.y34;
+yılan.y34=yılan.y33;yılan.y33=yılan.y32;yılan.y32=yılan.y31;
+yılan.y31=yılan.y30;yılan.y30=yılan.y29;yılan.y29=yılan.y28;
+yılan.y28=yılan.y27;yılan.y27=yılan.y26;yılan.y26=yılan.y25;
+yılan.y25=yılan.y24;yılan.y24=yılan.y23;yılan.y23=yılan.y22;
+yılan.y22=yılan.y21;yılan.y21=yılan.y20;yılan.y20=yılan.y19;
+yılan.y19=yılan.y18;yılan.y18=yılan.y17;yılan.y17=yılan.y16;
+yılan.y16=yılan.y15;
+yılan.y15=yılan.y14;yılan.y14=yılan.y13;
+yılan.y13=yılan.y12;yılan.y12=yılan.y11;yılan.y11=yılan.y10;
+yılan.y10=yılan.y9;yılan.y9=yılan.y8;yılan.y8=yılan.y7;
+yılan.y7=yılan.y6;yılan.y6=yılan.y5;yılan.y5=yılan.y4;
+yılan.y4=yılan.y3;yılan.y3=yılan.y2;yılan.y2=yılan.y;
+
+}
+
+if(M==1){yılan.y-=10;}
+if(M==2){yılan.y+=10;}
+if(M==3){yılan.x-=10;}
+if(M==4){yılan.x+=10;}
+}
+
+function gecis(){
+if(yılan.x<-1){yılan.x=340;}
+if(yılan.x>=345){yılan.x=0;}
+if(yılan.y<-1){yılan.y=340;}
+if(yılan.y>=345){yılan.y=0;}}
+
+/*
+Yemin kordinatlarını random olarak atamak için
+ şimdilik 25 farklı kordinat sistemi atıyoruz
+ */
+ function rand(){
+ var r1 =Math.round(Math.random()*10).toString(16);
+ var r2 =Math.round(Math.random()*10).toString(16);
+ if((r1==0||r1==1)&&(r2==0||r2==1)){Kor=1};
+ if((r1==0||r1==1)&&(r2==2||r2==3)){Kor=2};
+ if((r1==0||r1==1)&&(r2==4||r2==5)){Kor=3};
+ if((r1==0||r1==1)&&(r2==6||r2==7)){Kor=4};
+ if((r1==0||r1==1)&&(r2==8||r2==9)){Kor=5};
+ if((r1==2||r1==3)&&(r2==0||r2==1)){Kor=6};
+ if((r1==2||r1==3)&&(r2==2||r2==3)){Kor=7};
+ if((r1==2||r1==3)&&(r2==4||r2==5)){Kor=8};
+ if((r1==2||r1==3)&&(r2==6||r2==7)){Kor=9}; 
+ if((r1==2||r1==3)&&(r2==8||r2==9)){Kor=10};
+ if((r1==4||r1==5)&&(r2==0||r2==1)){Kor=11};
+ if((r1==4||r1==5)&&(r2==2||r2==3)){Kor=12};
+ if((r1==4||r1==5)&&(r2==4||r2==5)){Kor=13};
+ if((r1==4||r1==5)&&(r2==6||r2==7)){Kor=14};
+ if((r1==4||r1==5)&&(r2==8||r2==9)){Kor=15};
+ if((r1==6||r1==7)&&(r2==0||r2==1)){Kor=16};
+ if((r1==6||r1==7)&&(r2==2||r2==3)){Kor=17};
+ if((r1==6||r1==7)&&(r2==4||r2==5)){Kor=18};
+ if((r1==6||r1==7)&&(r2==6||r2==7)){Kor=19};
+ if((r1==6||r1==7)&&(r2==8||r2==9)){Kor=20};
+ if((r1==8||r1==9)&&(r2==0||r2==1)){Kor=21};
+ if((r1==8||r1==9)&&(r2==2||r2==3)){Kor=22};
+ if((r1==8||r1==9)&&(r2==4||r2==5)){Kor=23};
+ if((r1==8||r1==9)&&(r2==6||r2==7)){Kor=24};
+ if((r1==8||r1==9)&&(r2==8||r2==9)){Kor=25};
+ }
+ 
+ var yem_x;
+ var yem_y;
+ var Kor=8;
+ function DrawYem(){
+ if(Kor==1){yem_x=10;yem_y=10;}if(Kor==2){yem_x=10;yem_y=60;}
+ if(Kor==3){yem_x=10;yem_y=110;}if(Kor==4){yem_x=10;yem_y=160;}
+ if(Kor==5){yem_x=300;yem_y=210;}if(Kor==6){yem_x=130;yem_y=260;}
+ if(Kor==7){yem_x=10;yem_y=310;}if(Kor==8){yem_x=80;yem_y=60;}
+ if(Kor==9){yem_x=80;yem_y=110;}if(Kor==10){yem_x=290;yem_y=160;}
+ if(Kor==11){yem_x=170;yem_y=210;}if(Kor==12){yem_x=80;yem_y=270;}
+ if(Kor==13){yem_x=80;yem_y=320;}if(Kor==14){yem_x=180;yem_y=180;}
+ if(Kor==15){yem_x=150;yem_y=10;}if(Kor==16){yem_x=150;yem_y=60;}
+ if(Kor==17){yem_x=150;yem_y=160;}if(Kor==18){yem_x=230;yem_y=80;}
+ if(Kor==19){yem_x=230;yem_y=120;}if(Kor==20){yem_x=210;yem_y=150;}
+ if(Kor==21){yem_x=230;yem_y=200;}if(Kor==22){yem_x=230;yem_y=300;}
+ if(Kor==23){yem_x=300;yem_y=10;}if(Kor==24){yem_x=300;yem_y=100;}
+ if(Kor==25){yem_x=300;yem_y=300;}
+ }
+var puan=0;
+document.form1.ekran.value=puan;
+function YemiYe(){
+rand();DrawYem();
+durum+=1;
+puan+=1;
+document.form1.ekran.value=durum;
+}
+
+var artKar1=false;
+var artKar2=false;var artKar3=false;var artKar4=false;
+var artKar5=false;var artKar6=false;var artKar7=false;
+var artKar8=false;var artKar9=false;var artKar10=false;
+var artKar11=false;var artKar12=false;var artKar13=false;
+var artKar14=false;var artKar15=false;var artKar16=false;
+var artKar17=false;var artKar18=false;var artKar19=false;
+var artKar20=false;var artKar21=false;var artKar22=false;
+var artKar23=false;var artKar24=false;var artKar25=false;
+var artKar26=false;var artKar27=false;var artKar28=false;
+var artKar29=false;var artKar30=false;var artKar31=false;
+var artKar32=false;var artKar33=false;var artKar34=false;
+var artKar35=false;var artKar36=false;var artKar37=false;
+var artKar38=false;var artKar39=false;var artKar40=false;
+
+
+ var durum=0;
+ function ArtCiz(){
+ if(durum==1){artKar1=true;}
+else  if(durum==2){artKar2=true;}
+else  if(durum==3){artKar3=true;}
+ else if(durum==4){artKar4=true;}
+else  if(durum==5){artKar5=true;}
+else  if(durum==6){artKar6=true;}
+ else if(durum==7){artKar7=true;}
+ else if(durum==8){artKar8=true;}
+else if(durum==9){artKar9=true;}
+ else  if(durum==10){artKar10=true;}
+ else  if(durum==11){artKar11=true;}
+ else if(durum==12){artKar12=true;}
+ else  if(durum==13){artKar13=true;}
+ else  if(durum==14){artKar14=true;}
+ else if(durum==15){artKar15=true;}
+ else if(durum==16){artKar16=true;}
+ else if(durum==17){artKar17=true;}
+ else  if(durum==18){artKar18=true;}
+ else  if(durum==19){artKar19=true;}
+ else if(durum==20){artKar20=true;}
+ else  if(durum==21){artKar21=true;}
+ else  if(durum==22){artKar22=true;}
+ else if(durum==23){artKar23=true;}
+ else if(durum==24){artKar24=true;}
+ else if(durum==25){artKar25=true;}
+ else  if(durum==26){artKar26=true;}
+ else  if(durum==27){artKar27=true;}
+ else if(durum==28){artKar28=true;}
+ else  if(durum==29){artKar29=true;}
+ else  if(durum==30){artKar30=true;}
+ else  if(durum==31){artKar31=true;}
+ else  if(durum==32){artKar32=true;}
+ else if(durum==33){artKar33=true;}
+ else if(durum==34){artKar34=true;}
+ else if(durum==35){artKar35=true;}
+ else  if(durum==36){artKar36=true;}
+ else  if(durum==37){artKar37=true;}
+ else if(durum==38){artKar38=true;}
+ else  if(durum==39){artKar39=true;}
+ else  if(durum==40){artKar40=true;}
+  c.fillStyle="black"
+  if(artKar1==true){c.fillRect(yılan.x8,yılan.y8,yılan.w,yılan.h)}
+  if(artKar2==true){c.fillRect(yılan.x9,yılan.y9,yılan.w,yılan.h)}
+  if(artKar3==true){c.fillRect(yılan.x10,yılan.y10,yılan.w,yılan.h)}
+  if(artKar4==true){c.fillRect(yılan.x11,yılan.y11,yılan.w,yılan.h)}
+  if(artKar5==true){c.fillRect(yılan.x12,yılan.y12,yılan.w,yılan.h)}
+  if(artKar6==true){c.fillRect(yılan.x13,yılan.y13,yılan.w,yılan.h)}
+  if(artKar7==true){c.fillRect(yılan.x14,yılan.y14,yılan.w,yılan.h)}
+  if(artKar8==true){c.fillRect(yılan.x15,yılan.y15,yılan.w,yılan.h)}
+  if(artKar9==true){c.fillRect(yılan.x16,yılan.y16,yılan.w,yılan.h)}
+  if(artKar10==true){c.fillRect(yılan.x17,yılan.y17,yılan.w,yılan.h)}
+  if(artKar11==true){c.fillRect(yılan.x18,yılan.y18,yılan.w,yılan.h)}
+  if(artKar12==true){c.fillRect(yılan.x19,yılan.y19,yılan.w,yılan.h)}
+  if(artKar13==true){c.fillRect(yılan.x20,yılan.y20,yılan.w,yılan.h)}
+  if(artKar14==true){c.fillRect(yılan.x21,yılan.y21,yılan.w,yılan.h)}
+  if(artKar15==true){c.fillRect(yılan.x22,yılan.y22,yılan.w,yılan.h)}
+  if(artKar16==true){c.fillRect(yılan.x23,yılan.y23,yılan.w,yılan.h)}
+  if(artKar17==true){c.fillRect(yılan.x24,yılan.y24,yılan.w,yılan.h)}
+  if(artKar18==true){c.fillRect(yılan.x25,yılan.y25,yılan.w,yılan.h)}
+  if(artKar19==true){c.fillRect(yılan.x26,yılan.y26,yılan.w,yılan.h)}
+  if(artKar20==true){c.fillRect(yılan.x27,yılan.y27,yılan.w,yılan.h)}
+  if(artKar21==true){c.fillRect(yılan.x28,yılan.y28,yılan.w,yılan.h)}
+  if(artKar22==true){c.fillRect(yılan.x29,yılan.y29,yılan.w,yılan.h)}
+  if(artKar23==true){c.fillRect(yılan.x30,yılan.y30,yılan.w,yılan.h)}
+  if(artKar24==true){c.fillRect(yılan.x31,yılan.y31,yılan.w,yılan.h)}
+  if(artKar25==true){c.fillRect(yılan.x32,yılan.y32,yılan.w,yılan.h)}
+  if(artKar26==true){c.fillRect(yılan.x33,yılan.y33,yılan.w,yılan.h)}
+  if(artKar27==true){c.fillRect(yılan.x34,yılan.y34,yılan.w,yılan.h)}
+  if(artKar28==true){c.fillRect(yılan.x35,yılan.y35,yılan.w,yılan.h)}
+  if(artKar29==true){c.fillRect(yılan.x36,yılan.y36,yılan.w,yılan.h)}
+  if(artKar30==true){c.fillRect(yılan.x37,yılan.y37,yılan.w,yılan.h)}
+  if(artKar31==true){c.fillRect(yılan.x38,yılan.y38,yılan.w,yılan.h)}
+  if(artKar32==true){c.fillRect(yılan.x39,yılan.y39,yılan.w,yılan.h)}
+  if(artKar33==true){c.fillRect(yılan.x40,yılan.y40,yılan.w,yılan.h)}
+  if(artKar34==true){c.fillRect(yılan.x41,yılan.y41,yılan.w,yılan.h)}
+  if(artKar35==true){c.fillRect(yılan.x42,yılan.y42,yılan.w,yılan.h)}
+  if(artKar36==true){c.fillRect(yılan.x43,yılan.y43,yılan.w,yılan.h)}
+  if(artKar37==true){c.fillRect(yılan.x44,yılan.y44,yılan.w,yılan.h)}
+  if(artKar38==true){c.fillRect(yılan.x45,yılan.y45,yılan.w,yılan.h)}
+  if(artKar39==true){c.fillRect(yılan.x46,yılan.y46,yılan.w,yılan.h)}
+  if(artKar40==true){c.fillRect(yılan.x47,yılan.y47,yılan.w,yılan.h)}
+ }
+ 
+ var o;
+ function durdur(){
+ document.getElementById("durak").style.display="block";
+ o=M;
+ M=5; }
+ function devam(){
+ document.getElementById("durak").style.display="none";
+ M=o; 
+ }
+ 
+ 
+ function olum(){
+ if(M!=0){
+if((yılan.x==yılan.x1&&yılan.y==yılan.y1)||
+(yılan.x==yılan.x2&&yılan.y==yılan.y2)||
+(yılan.x==yılan.x3&&yılan.y==yılan.y3)||
+(yılan.x==yılan.x4&&yılan.y==yılan.y4)||
+(yılan.x==yılan.x5&&yılan.y==yılan.y5)||
+(yılan.x==yılan.x6&&yılan.y==yılan.y6)||
+(yılan.x==yılan.x7&&yılan.y==yılan.y7)||
+(yılan.x==yılan.x8&&yılan.y==yılan.y8&&artKar1==true)||
+(yılan.x==yılan.x9&&yılan.y==yılan.y9&&artKar2==true)||
+(yılan.x==yılan.x10&&yılan.y==yılan.y10&&artKar3==true)||
+(yılan.x==yılan.x11&&yılan.y==yılan.y11&&artKar4==true)||
+(yılan.x==yılan.x12&&yılan.y==yılan.y12&&artKar5==true)||
+(yılan.x==yılan.x13&&yılan.y==yılan.y13&&artKar6==true)||
+(yılan.x==yılan.x14&&yılan.y==yılan.y14&&artKar7==true)||
+(yılan.x==yılan.x15&&yılan.y==yılan.y15&&artKar8==true)||
+(yılan.x==yılan.x16&&yılan.y==yılan.y16&&artKar9==true)||
+(yılan.x==yılan.x17&&yılan.y==yılan.y17&&artKar10==true)||
+(yılan.x==yılan.x18&&yılan.y==yılan.y18&&artKar11==true)||
+(yılan.x==yılan.x19&&yılan.y==yılan.y19&&artKar12==true)||
+(yılan.x==yılan.x20&&yılan.y==yılan.y20&&artKar13==true)||
+(yılan.x==yılan.x21&&yılan.y==yılan.y21&&artKar14==true)||
+(yılan.x==yılan.x22&&yılan.y==yılan.y22&&artKar15==true)||
+(yılan.x==yılan.x23&&yılan.y==yılan.y23&&artKar16==true)||
+(yılan.x==yılan.x24&&yılan.y==yılan.y24&&artKar17==true)||
+(yılan.x==yılan.x25&&yılan.y==yılan.y25&&artKar18==true)||
+(yılan.x==yılan.x26&&yılan.y==yılan.y26&&artKar19==true)||
+(yılan.x==yılan.x27&&yılan.y==yılan.y27&&artKar20==true)||
+(yılan.x==yılan.x28&&yılan.y==yılan.y28&&artKar21==true)||
+(yılan.x==yılan.x29&&yılan.y==yılan.y29&&artKar22==true)||
+(yılan.x==yılan.x30&&yılan.y==yılan.y30&&artKar23==true)||
+(yılan.x==yılan.x31&&yılan.y==yılan.y31&&artKar24==true)||
+(yılan.x==yılan.x32&&yılan.y==yılan.y32&&artKar25==true)||
+(yılan.x==yılan.x33&&yılan.y==yılan.y33&&artKar26==true)||
+(yılan.x==yılan.x34&&yılan.y==yılan.y34&&artKar27==true)||
+(yılan.x==yılan.x35&&yılan.y==yılan.y35&&artKar28==true)||
+(yılan.x==yılan.x36&&yılan.y==yılan.y36&&artKar29==true)||
+(yılan.x==yılan.x37&&yılan.y==yılan.y37&&artKar30==true)||
+(yılan.x==yılan.x38&&yılan.y==yılan.y38&&artKar31==true)||
+(yılan.x==yılan.x39&&yılan.y==yılan.y39&&artKar32==true)||
+(yılan.x==yılan.x40&&yılan.y==yılan.y40&&artKar33==true)||
+(yılan.x==yılan.x41&&yılan.y==yılan.y41&&artKar34==true)||
+(yılan.x==yılan.x42&&yılan.y==yılan.y42&&artKar35==true)||
+(yılan.x==yılan.x43&&yılan.y==yılan.y43&&artKar36==true)||
+(yılan.x==yılan.x44&&yılan.y==yılan.y44&&artKar37==true)||
+(yılan.x==yılan.x45&&yılan.y==yılan.y45&&artKar38==true)||
+(yılan.x==yılan.x46&&yılan.y==yılan.y46&&artKar39==true)||
+(yılan.x==yılan.x47&&yılan.y==yılan.y47&&artKar40==true))
+{
+//kaybetme.fonksiyonu
+document.getElementById("lost").style.display="block";
+document.form2.SP.value=puan;
+M=5;
+}}else{} }
+ 
+ 
+ function tekrar(){
+ M=0;
+ yılan.x=100;yılan.y=100;
+yılan.x2=100;yılan.y2=90;yılan.x3=100;yılan.y3=80;
+yılan.x4=100;yılan.y4=70;yılan.x5=100;yılan.y5=60;
+yılan.x6=100;yılan.y6=50;yılan.x7=100;yılan.y7=40;
+puan=0;durum=0;
+ document.form1.ekran.value=puan;
+ 
+ artKar1=false;
+ artKar2=false;   artKar3=false;   artKar4=false;
+ artKar5=false;   artKar6=false;   artKar7=false;
+ artKar8=false;   artKar9=false;   artKar10=false;
+ artKar11=false;   artKar12=false;   artKar13=false;
+ artKar14=false;   artKar15=false;   artKar16=false;
+ artKar17=false;   artKar18=false;   artKar19=false;
+ artKar20=false;   artKar21=false;   artKar22=false;
+ artKar23=false;   artKar24=false;   artKar25=false;
+ artKar26=false;   artKar27=false;   artKar28=false;
+ artKar29=false;   artKar30=false;   artKar31=false;
+ artKar32=false;   artKar33=false;   artKar34=false;
+ artKar35=false;   artKar36=false;   artKar37=false;
+ artKar38=false;   artKar39=false;   artKar40=false;
+ document.getElementById("lost").style.display="none";
+ rand();DrawYem();
+}
+
+
+
+ 
+ 
+</script>
+</body>
+</html>
